@@ -1,6 +1,6 @@
 import React from "react";
 import { db } from "../firebase/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc } from "firebase/firestore";
 
 const CrudPage = () => {
   const crearPelicula = async () => {
@@ -12,6 +12,16 @@ const CrudPage = () => {
 
     const collectionPeliculas = collection(db, "peliculas");
     await addDoc(collectionPeliculas, pelicula);
+  };
+
+  const obtenerPeliculas = async () => {
+    const collectionPeliculas = collection(db, "peliculas");
+    const resp = await getDocs(collectionPeliculas);
+    const peliculas = resp.docs.map((pelicula) => ({
+      id: pelicula.id,
+      ...pelicula.data(),
+    }));
+    console.log(peliculas);
   };
 
   return (
@@ -30,7 +40,11 @@ const CrudPage = () => {
           >
             Agregar
           </button>
-          <button type="button" className="btn btn-info">
+          <button
+            type="button"
+            className="btn btn-info"
+            onClick={obtenerPeliculas}
+          >
             Obtener
           </button>
           <button type="button" className="btn btn-warning">
