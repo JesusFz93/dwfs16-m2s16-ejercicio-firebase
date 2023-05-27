@@ -30,6 +30,8 @@ const CrudPage = () => {
     }));
 
     console.log(peliculas);
+    const autor = import.meta.env.VITE_NAME;
+    console.log(autor);
   };
 
   const actualizarPelicula = async () => {
@@ -55,6 +57,7 @@ const CrudPage = () => {
       <main className="row">
         <article className="col">
           <h1>CRUD</h1>
+          <h2>Esto fue un cambio desde mi dev</h2>
         </article>
       </main>
       <section className="row">
