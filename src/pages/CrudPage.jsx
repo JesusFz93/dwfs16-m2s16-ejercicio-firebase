@@ -1,12 +1,18 @@
 import React from "react";
 import { db } from "../firebase/firebase";
-import { collection, addDoc, getDocs, getDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 const CrudPage = () => {
   const crearPelicula = async () => {
     const pelicula = {
-      name: "Avengers",
-      category: "Heroes",
+      name: "El Aro",
+      category: "Terror",
       image: "https://images2.alphacoders.com/118/thumb-1920-1188043.jpg",
     };
 
@@ -24,6 +30,18 @@ const CrudPage = () => {
     }));
 
     console.log(peliculas);
+  };
+
+  const actualizarPelicula = async () => {
+    const pelicula = {
+      name: "Avengers 2",
+      category: "Villanos",
+      image: "https://images2.alphacoders.com/118/thumb-1920-1188043.jpg",
+    };
+
+    const registro = doc(db, "peliculas", "GePyrAOqndgFL2GR8BAM");
+    await updateDoc(registro, pelicula);
+    await obtenerPeliculas();
   };
 
   return (
@@ -49,7 +67,11 @@ const CrudPage = () => {
           >
             Obtener
           </button>
-          <button type="button" className="btn btn-warning">
+          <button
+            type="button"
+            className="btn btn-warning"
+            onClick={actualizarPelicula}
+          >
             Actualizar
           </button>
           <button type="button" className="btn btn-danger">
