@@ -5,13 +5,14 @@ import { collection, addDoc, getDocs, getDoc } from "firebase/firestore";
 const CrudPage = () => {
   const crearPelicula = async () => {
     const pelicula = {
-      name: "Scream",
-      category: "Terror",
+      name: "Avengers",
+      category: "Heroes",
       image: "https://images2.alphacoders.com/118/thumb-1920-1188043.jpg",
     };
 
     const collectionPeliculas = collection(db, "peliculas");
     await addDoc(collectionPeliculas, pelicula);
+    await obtenerPeliculas();
   };
 
   const obtenerPeliculas = async () => {
@@ -21,6 +22,7 @@ const CrudPage = () => {
       id: pelicula.id,
       ...pelicula.data(),
     }));
+
     console.log(peliculas);
   };
 
