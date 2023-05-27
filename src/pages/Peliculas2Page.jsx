@@ -5,9 +5,9 @@ import {
   addDoc,
   getDocs,
   doc,
+  //   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { NavLink } from "react-router-dom";
 
 const formInitialState = {
   name: "",
@@ -21,9 +21,33 @@ const PeliculasPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log(form);
     await crearPelicula();
 
     setForm(formInitialState);
+  };
+
+  const crearPelicula = async () => {
+    const collectionPeliculas = collection(db, "peliculas");
+    await addDoc(collectionPeliculas, form);
+    await obtenerPeliculas();
+  };
+
+  const eliminarPelicula = async (id) => {
+    const registro = doc(db, "peliculas", id);
+    await deleteDoc(registro);
+    await obtenerPeliculas();
+  };
+
+  const obtenerPeliculas = async () => {
+    const collectionPeliculas = collection(db, "peliculas");
+    const resp = await getDocs(collectionPeliculas);
+    const peliculas = resp.docs.map((pelicula) => ({
+      id: pelicula.id,
+      ...pelicula.data(),
+    }));
+
+    setMovies(peliculas);
   };
 
   const handleChange = (e) => {
@@ -33,34 +57,8 @@ const PeliculasPage = () => {
     });
   };
 
-  const obtenerPeliculas = async () => {
-    const resp = await getDocs(collection(db, "peliculas"));
-    const peliculas = resp.docs.map((pelicula) => ({
-      id: pelicula.id,
-      ...pelicula.data(),
-    }));
-    setMovies(peliculas);
-  };
-
-  const crearPelicula = async () => {
-    const coleccion = collection(db, "peliculas");
-    await addDoc(coleccion, form);
-    await obtenerPeliculas();
-  };
-
-  const handleDelete = (id) => {
-    eliminarPelicula(id);
-  };
-
-  const eliminarPelicula = async (id) => {
-    const coleccion = doc(db, "peliculas", id);
-    await deleteDoc(coleccion);
-    await obtenerPeliculas();
-  };
-
   useEffect(() => {
     obtenerPeliculas();
-    console.log(import.meta.env.VITE_VAR);
   }, []);
 
   return (
@@ -116,9 +114,9 @@ const PeliculasPage = () => {
           </form>
         </article>
       </main>
-      <section className="row row-cols-1 row-cols-md-3 g-4 pt-5">
+      <div className="row row-cols-1 row-cols-md-3 g-4">
         {movies.map((movie) => (
-          <article key={movie.id} className="col">
+          <div key={movie.id} className="col">
             <div className="card h-100">
               <img
                 src={movie.image}
@@ -128,31 +126,18 @@ const PeliculasPage = () => {
               <div className="card-body">
                 <h5 className="card-title">{movie.name}</h5>
                 <p className="card-text">{movie.category}</p>
-                <div
-                  className="btn-group d-flex justify-content-between"
-                  role="group"
-                  aria-label="Basic example"
+                <button
+                  type="buttton"
+                  className="btn btn-danger"
+                  onClick={() => eliminarPelicula(movie.id)}
                 >
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(movie.id)}
-                  >
-                    Eliminar
-                  </button>
-                  <NavLink
-                    type="button"
-                    className="btn btn-info"
-                    to={`/peliculas/${movie.id}`}
-                  >
-                    Ver
-                  </NavLink>
-                </div>
+                  Eliminar
+                </button>
               </div>
             </div>
-          </article>
+          </div>
         ))}
-      </section>
+      </div>
     </>
   );
 };
