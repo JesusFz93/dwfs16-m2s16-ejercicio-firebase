@@ -1,4 +1,3 @@
-import React from "react";
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -6,13 +5,14 @@ import {
   getDocs,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const CrudPage = () => {
   const crearPelicula = async () => {
     const pelicula = {
-      name: "El Aro",
-      category: "Terror",
+      name: "Avengers",
+      category: "Heroes",
       image: "https://images2.alphacoders.com/118/thumb-1920-1188043.jpg",
     };
 
@@ -41,6 +41,12 @@ const CrudPage = () => {
 
     const registro = doc(db, "peliculas", "GePyrAOqndgFL2GR8BAM");
     await updateDoc(registro, pelicula);
+    await obtenerPeliculas();
+  };
+
+  const eliminarPelicula = async () => {
+    const registro = doc(db, "peliculas", "GePyrAOqndgFL2GR8BAM");
+    await deleteDoc(registro);
     await obtenerPeliculas();
   };
 
@@ -74,7 +80,11 @@ const CrudPage = () => {
           >
             Actualizar
           </button>
-          <button type="button" className="btn btn-danger">
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={eliminarPelicula}
+          >
             Eliminar
           </button>
         </article>
