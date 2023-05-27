@@ -3,15 +3,15 @@ import { db } from "../firebase/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 const CrudPage = () => {
-  const crearLibro = async () => {
-    const libro = {
-      name: "Aprender React",
-      category: "Programación",
-      image: "https://reactjsexample.com/content/images/2019/04/React.jpg",
+  const crearPelicula = async () => {
+    const pelicula = {
+      name: "Scream",
+      category: "Terror",
+      image: "https://images2.alphacoders.com/118/thumb-1920-1188043.jpg",
     };
 
-    const collectionLibros = collection(db, "cuadernos");
-    await addDoc(collectionLibros, libro);
+    const collectionPeliculas = collection(db, "peliculas");
+    await addDoc(collectionPeliculas, pelicula);
   };
 
   return (
@@ -26,7 +26,7 @@ const CrudPage = () => {
           <button
             type="button"
             className="btn btn-success"
-            onClick={crearLibro}
+            onClick={crearPelicula}
           >
             Agregar
           </button>
